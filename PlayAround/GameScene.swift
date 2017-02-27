@@ -67,13 +67,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
         }
         
-        for possibleBuilding in self.children {
-            if (possibleBuilding.name == "Building") {
-                if (possibleBuilding is SKSpriteNode) {
-                    possibleBuilding.physicsBody?.categoryBitMask = BodyType.building.rawValue
-                    possibleBuilding.physicsBody?.collisionBitMask = 0
+        for node in self.children {
+            if (node.name == "Building") {
+                if (node is SKSpriteNode) {
+                    node.physicsBody?.categoryBitMask = BodyType.building.rawValue
+                    node.physicsBody?.collisionBitMask = 0
                     print ("Found a building")
                 }
+            }
+            if let aCastle:Castle = node as? Castle {
+                aCastle.setUpCastle()
+                aCastle.dudesInCastle = 5
             }
         }
     }
@@ -226,7 +230,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print ("Touched a building")
         } else if (contact.bodyB.categoryBitMask == BodyType.player.rawValue && contact.bodyA.categoryBitMask == BodyType.building.rawValue) {
             print ("Touched a person")
+        } else if (contact.bodyA.categoryBitMask == BodyType.player.rawValue && contact.bodyB.categoryBitMask == BodyType.castle.rawValue) {
+            print ("Touched a castle")
+        } else if (contact.bodyB.categoryBitMask == BodyType.player.rawValue && contact.bodyA.categoryBitMask == BodyType.castle.rawValue) {
+            print ("Touched a castle")
         }
+
     }
 
 }
